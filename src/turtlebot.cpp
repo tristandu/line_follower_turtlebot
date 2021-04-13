@@ -32,38 +32,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 void turtlebot::dir_sub(line_follower_turtlebot::pos msg) {
     turtlebot::dir = msg.direction;
 }
+
 void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
  ros::Publisher &pub, ros::Rate &rate) {
-    // If direction is left
-    if (turtlebot::dir == 0) {
-        velocity.linear.x = 0.1;
-        velocity.angular.z = 0.30;
-        pub.publish(velocity);
-        rate.sleep();
-        ROS_INFO_STREAM("Turning Left");
-    }
-    // If direction is straight
-    if (turtlebot::dir == 1) {
-        velocity.linear.x = 0.15;
-        velocity.angular.z = 0;
-        pub.publish(velocity);
-        rate.sleep();
-        ROS_INFO_STREAM("Straight");
-    }
-    // If direction is right
-    if (turtlebot::dir == 2) {
-        velocity.linear.x = 0.1;
-        velocity.angular.z = -0.30;
-        pub.publish(velocity);
-        rate.sleep();
-        ROS_INFO_STREAM("Turning Right");
-    }
+
     // If robot has to search
-    if (turtlebot::dir == 3) {
+    if (turtlebot::dir == -1) {
         velocity.linear.x = 0;
         velocity.angular.z = 0.40;
         pub.publish(velocity);
         rate.sleep();
         ROS_INFO_STREAM("Searching");
+        
+    } else {
+        double max_vel=0.12;
+        double Kp=0.0025;
+        double Kd=0.007;
+        double angular_z = 1000*(Kp *turtlebot::dir + Kd * (turtlebot::dir - turtlebot::last_dir));     //in turtlebot_autorace the error goes from -500 to 500 so we multiply by 1000
+        
+        turtlebot::last_dir=turtlebot::dir;
+        
+        velocity.linear.x = min(max_vel * ((1 - abs(error) / 0.05) ** 2.2), 0.2);
+        velocity.angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
+        
+        pub.publish(velocity);
+        rate.sleep();
+        ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << turtlebot::last_dir);
     }
 }
