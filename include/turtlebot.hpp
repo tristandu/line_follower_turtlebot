@@ -33,7 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 class turtlebot {
  public:
-    int dir;  /// Direction message to read published directions
+    void dir;  /// Direction message to read published directions
 /**
 *@brief Callback used to subscribe to the direction message published by the Line detection node
 *@param msg is the custom message pos which publishes a direction int between 0 and 3
