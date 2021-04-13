@@ -50,7 +50,7 @@ cv::Mat LineDetect::Gauss(cv::Mat input) {
   return output;
 }
 
-int LineDetect::colorthresh(cv::Mat input) {
+double LineDetect::colorthresh(cv::Mat input) {
   // Initializaing variables
   cv::Size s = input.size();
   std::vector<std::vector<cv::Point> > v;
