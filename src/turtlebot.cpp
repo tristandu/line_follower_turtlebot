@@ -38,6 +38,7 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
 
     // If robot has to search
     if (turtlebot::dir == -1) {
+        turtlebot::last_dir ==0;
         velocity.linear.x = 0;
         velocity.angular.z = 0.40;
         pub.publish(velocity);
@@ -57,6 +58,7 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         
         pub.publish(velocity);
         rate.sleep();
-        ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << turtlebot::last_dir);
+        ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << turtlebot::last_dir << endl);
+        ROS_INFO_STREAM("Linear velocity is: " << velocity.linear << endl);
     }
 }
