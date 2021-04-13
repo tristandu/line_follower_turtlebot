@@ -53,7 +53,7 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         
         turtlebot::last_dir=turtlebot::dir;
         
-        velocity.linear.x = min(max_vel * ((1 - abs(error) / 0.05) ** 2.2), 0.2);
+        velocity.linear.x = min(max_vel * ((1 - abs(error) / 0.5) ** 2.2), 0.2);
         velocity.angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
         
         pub.publish(velocity);
