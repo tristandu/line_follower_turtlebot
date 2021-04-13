@@ -54,7 +54,6 @@ int main(int argc, char **argv) {
         ros::spinOnce();
         // Publish velocity commands to turtlebot
         bot.vel_cmd(velocity, pub, rate);
-        bot.last_dir=bot.dir;
         rate.sleep();
     }
     return 0;
