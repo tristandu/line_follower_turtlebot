@@ -103,22 +103,14 @@ int LineDetect::colorthresh(cv::Mat input) {
     cv::circle(LineDetect::img_mask, p1, 5, cv::Scalar(155, 200, 0), -1);
   }
   c_x = M.m10/M.m00;
-  // Tolerance to chooise directions
-  auto tol = 15;
+  
   auto count = cv::countNonZero(img_mask);
-  // Turn left if centroid is to the left of the image center minus tolerance
-  // Turn right if centroid is to the right of the image center plus tolerance
-  // Go straight if centroid is near image center
-  if (c_x < w/2-tol) {
-    LineDetect::dir = 0;
-  } else if (c_x > w/2+tol) {
-    LineDetect::dir = 2;
-  } else {
-    LineDetect::dir = 1;
-  }
-  // Search if no line detected
-  if (count == 0) {
-    LineDetect::dir = 3;
+  
+ // if no line is detected 
+  if (count ==0){
+    LineDetect::dir ==-1;
+  } else{
+  LineDetect::dir=c_x/w-1/2     //if dir>0, the centroid is on the right and the robot has to turn right; dir belongs to [-1/2;1/2]
   }
   return LineDetect::dir;
 }
