@@ -110,7 +110,7 @@ double LineDetect::colorthresh(cv::Mat input) {
   if (count ==0){
     LineDetect::dir ==-1;
   } else{
-  LineDetect::dir=c_x/w-1/2     //if dir>0, the centroid is on the right and the robot has to turn right; dir belongs to [-1/2;1/2]
+  LineDetect::dir=c_x/w-1/2;    //if dir>0, the centroid is on the right and the robot has to turn right; dir belongs to [-1/2;1/2]
   }
   return LineDetect::dir;
 }
