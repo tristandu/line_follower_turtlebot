@@ -50,10 +50,15 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         
     } else {
 	double last_dir_save=0;
-        double max_vel=0.12;
+        double max_vel=0.24;
         double Kp=0.0025;
         double Kd=0.007;
-        double angular_z = 1000*(Kp *turtlebot::dir + Kd * (turtlebot::dir - turtlebot::last_dir));     //in turtlebot_autorace the error goes from -500 to 500 so we multiply by 1000
+
+	//in turtlebot_autorace the error goes from -500 to 500 so we multiply by 1000
+        double angular_z = 1000*(Kp *turtlebot::dir + Kd * (turtlebot::dir - turtlebot::last_dir));     
+	
+	//to know the contribution of the derivative part
+	double deriv_contrib = 1000 * Kd * (turtlebot::dir - turtlebot::last_dir)/angular_z;		
         
 	last_dir_save=turtlebot::last_dir;
         turtlebot::last_dir=turtlebot::dir;
@@ -69,5 +74,6 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         rate.sleep();
         ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << last_dir_save);
         ROS_INFO_STREAM("Linear velocity is: " << velocity.linear.x);
+	ROS_INFO_STREAM("D contribution: " << 100*deriv_contrib << " %");
     }
 }
