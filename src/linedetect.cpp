@@ -59,11 +59,11 @@ double LineDetect::colorthresh(cv::Mat input) {
   auto c_x = 0.0;
   // Detect all objects within the HSV range
   cv::cvtColor(input, LineDetect::img_hsv, CV_BGR2HSV);
-  LineDetect::LowerYellow = {15, 100, 100};
-  LineDetect::UpperYellow = {35, 255, 255};
+  LineDetect::LowerYellow = {20, 100, 100};
+  LineDetect::UpperYellow = {30, 255, 255};
   cv::inRange(LineDetect::img_hsv, LowerYellow,
    UpperYellow, LineDetect::img_mask);
-  img_mask(cv::Rect(0, 0, w, 0.1*h)) = 0;
+  img_mask(cv::Rect(0, 0, w, 0.8*h)) = 0;
   // Find contours for better visualization
   cv::findContours(LineDetect::img_mask, v, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
   // If contours exist add a bounding
@@ -94,8 +94,8 @@ double LineDetect::colorthresh(cv::Mat input) {
     CV_FONT_HERSHEY_COMPLEX, 1, CV_RGB(255, 0, 0));
   }
   // Mask image to limit the future turns affecting the output
-  img_mask(cv::Rect(0.85*w, 0, 0.15*w, h)) = 0;
-  img_mask(cv::Rect(0, 0, 0.15*w, h)) = 0;
+  img_mask(cv::Rect(0.7*w, 0, 0.3*w, h)) = 0;
+  img_mask(cv::Rect(0, 0, 0.3*w, h)) = 0;
   // Perform centroid detection of line
   cv::Moments M = cv::moments(LineDetect::img_mask);
   if (M.m00 > 0) {
@@ -105,12 +105,16 @@ double LineDetect::colorthresh(cv::Mat input) {
   c_x = M.m10/M.m00;
   
   auto count = cv::countNonZero(img_mask);
-  
- // if no line is detected 
+  // if no line is detected 
   if (count ==0){
-    LineDetect::dir ==-1;
+    LineDetect::dir =-1.0;
   } else{
-  LineDetect::dir=c_x/w-1/2;    //if dir>0, the centroid is on the right and the robot has to turn right; dir belongs to [-1/2;1/2]
+  LineDetect::dir=c_x/w - 0.5;    //if dir>0, the centroid is on the right and the robot has to turn right; dir belongs to [-1/2;1/2]
   }
+
+  // Output images viewed by the turtlebot
+  cv::namedWindow("Turtlebot View");
+  imshow("Turtlebot View", input);
+
   return LineDetect::dir;
 }
