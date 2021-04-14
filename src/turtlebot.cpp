@@ -28,6 +28,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ros/console.h"
 #include "turtlebot.hpp"
 #include "line_follower_turtlebot/pos.h"
+#include <cmath>
+
+using namespace std;
 
 void turtlebot::dir_sub(line_follower_turtlebot::pos msg) {
     turtlebot::dir = msg.direction;
@@ -53,12 +56,16 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         
         turtlebot::last_dir=turtlebot::dir;
         
-        velocity.linear.x = min(max_vel * ((1 - abs(error) / 0.5) ** 2.2), 0.2);
-        velocity.angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
+        velocity.linear.x = min(max_vel * pow((1 - abs(turtlebot::dir) / 0.5), 2.2), 0.2);
+	if (angular_z < 0){
+		velocity.angular.z = -max(angular_z, -2.0);
+	} else {
+		velocity.angular.z = -min(angular_z, 2.0);
+	}
         
         pub.publish(velocity);
         rate.sleep();
-        ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << turtlebot::last_dir << endl);
-        ROS_INFO_STREAM("Linear velocity is: " << velocity.linear << endl);
+        ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << turtlebot::last_dir);
+        ROS_INFO_STREAM("Linear velocity is: " << velocity.linear);
     }
 }
