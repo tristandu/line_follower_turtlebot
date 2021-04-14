@@ -68,6 +68,6 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         pub.publish(velocity);
         rate.sleep();
         ROS_INFO_STREAM("Tracking! Error is: " << turtlebot::dir << " and last error was " << last_dir_save);
-        ROS_INFO_STREAM("Linear velocity is: " << velocity.linear);
+        ROS_INFO_STREAM("Linear velocity is: " << velocity.linear.x);
     }
 }
