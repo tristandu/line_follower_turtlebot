@@ -94,8 +94,8 @@ int LineDetect::colorthresh(cv::Mat input) {
     CV_FONT_HERSHEY_COMPLEX, 1, CV_RGB(255, 0, 0));
   }
   // Mask image to limit the future turns affecting the output
-  img_mask(cv::Rect(0.85*w, 0, 0.15*w, h)) = 0;
-  img_mask(cv::Rect(0, 0, 0.15*w, h)) = 0;
+  img_mask(cv::Rect(0.9*w, 0, 0.1*w, h)) = 0;
+  img_mask(cv::Rect(0, 0, 0.1*w, h)) = 0;
   // Perform centroid detection of line
   cv::Moments M = cv::moments(LineDetect::img_mask);
   if (M.m00 > 0) {
