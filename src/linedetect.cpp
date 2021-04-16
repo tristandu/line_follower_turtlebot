@@ -63,7 +63,7 @@ double LineDetect::colorthresh(cv::Mat input) {
   LineDetect::UpperYellow = {35, 255, 255};
   cv::inRange(LineDetect::img_hsv, LowerYellow,
    UpperYellow, LineDetect::img_mask);
-  img_mask(cv::Rect(0, 0, w, 0.9*h)) = 0;
+  img_mask(cv::Rect(0, 0, w, 0.1*h)) = 0;
   // Find contours for better visualization
   cv::findContours(LineDetect::img_mask, v, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
   // If contours exist add a bounding
