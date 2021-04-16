@@ -50,7 +50,7 @@ void turtlebot::vel_cmd(geometry_msgs::Twist &velocity,
         
     } else {
 	double last_dir_save=0;
-        double max_vel=0.24;
+        double max_vel=0.18;
         double Kp=0.0025;
         double Kd=0.007;
 
